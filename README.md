@@ -10,22 +10,6 @@ O projeto consiste em um aplicativo Flutter que oferece funcionalidade de login 
 - Google Maps API: Utilizado para exibir mapas e dados relacionados.
 - MySQL: Utilizado como banco de dados para armazenar informações de usuário.
 
-
-## Estrutura de Pastas
-
-projeto
-├── lib/
-│ ├── database/
-│ ├── controller/
-│ ├── models/
-│ ├── view/
-│ └── main.dart
-├── assets/
-│    └── images/
-├── pubspec.yaml
-└── README.md
-
-
 ## Fluxo de Funcionalidades
 
 - Tela de login: Permite que os usuários entrem com suas credenciais (e-mail/senha).
