@@ -14,63 +14,87 @@ class ListUserPage extends StatefulWidget {
 }
 
 class _ListUserPageState extends State<ListUserPage> {
+  Future<List<User>> minhaLista = getUserMySql();
+
+  void removeItem(User contato) async {
+    List<User> usersList = await minhaLista;
+    usersList.remove(contato);
+
+    setState(() {
+      minhaLista = Future.value(usersList);
+    });
+
+    // Realize outras operações com a lista modificada, se necessário
+
+    print(usersList); // Saída: Lista atualizada após remover o item
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Contatos'),
+        title: const Text('Usuarios'),
       ),
       body: FutureBuilder<List<User>>(
-        future: getUserMySql(),
+        future: minhaLista,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    final contato = snapshot.data![index];
-                    return Card(
-                      child: Column(
-                        children: [
-                          TextButton(
-                            child: Column(
-                              children: [
-                                Text(contato.email),
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  final contato = snapshot.data![index];
+                  return Card(
+                    child: Column(
+                      children: [
+                        TextButton(
+                          child: Column(
+                            children: [
+                              Text(contato.name),
+                               SizedBox(height: 10),
+                                      Text(contato.email),
+                                 SizedBox(height: 10),
+
                                 Row(
-                                  children: [
-                                    TextButton(
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                Colors.red),
-                                        foregroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                Colors.white),
-                                      ),
-                                      onPressed: () {
-                                        delete(contato.id);
-                                      },
-                                      child: const Text('Apagar'),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HomePage(
-                                      email: (contato.email),
-                                      senha: (contato.password),
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+
+                                children: [
+                                  TextButton(
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.red),
+                                      foregroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.white),
                                     ),
-                                  ));
-                            },
+                                    onPressed: () {
+                                      delete(contato.id);
+                                      removeItem(contato);
+                                    },
+                                    child: const Text('Apagar'),
+                                  )
+                                ],
+                              )
+                            ],
                           ),
-                        ],
-                      ),
-                    );
-                  });
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(
+                                  email: (contato.email),
+                                  senha: (contato.password),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
             } else if (snapshot.hasError) {
               return Center(
                 child: Text('Erro ao carregar contatos: ${snapshot.error}'),
