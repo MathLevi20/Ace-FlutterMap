@@ -40,24 +40,24 @@ class _ListUserPageState extends State<ListUserPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
+              ;
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   final contato = snapshot.data![index];
                   return Card(
+                      child: SingleChildScrollView(
                     child: Column(
                       children: [
                         TextButton(
                           child: Column(
                             children: [
                               Text(contato.name),
-                               SizedBox(height: 10),
-                                      Text(contato.email),
-                                 SizedBox(height: 10),
-
-                                Row(
-                                                                mainAxisAlignment: MainAxisAlignment.center,
-
+                              const SizedBox(height: 10),
+                              Text(contato.email),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   TextButton(
                                     style: ButtonStyle(
@@ -92,7 +92,7 @@ class _ListUserPageState extends State<ListUserPage> {
                         ),
                       ],
                     ),
-                  );
+                  ));
                 },
               );
             } else if (snapshot.hasError) {

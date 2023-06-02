@@ -1,10 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:maps/database/auth.dart';
 import 'package:maps/view/MapView.dart';
-
-import '../database/database.dart';
-
+import 'package:maps/view/Menu.dart';
+import 'package:maps/view/PasswordResert.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -26,22 +28,16 @@ class _RegisterPageState extends State<LoginPage> {
     //email: email,
     // senha: senha,
     //);
+    AuthService authService = AuthService();
 
-    //await insertContato(novoContato);
-    await loginUser(email, password);
-    var isLoggedIn = await loginUser(email, password);
-    print(isLoggedIn);
-    if (isLoggedIn != null && isLoggedIn) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const GoogleMaps()),
-      );
-    } else {
+    String loginResult =
+        await authService.signInWithEmailAndPassword(email, password);
+    if (loginResult.startsWith('Erro')) {
       showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
           title: const Text('Erro!'),
-          content: const Text('Seu Cadastro não existe'),
+          content: Text(loginResult),
           actions: <Widget>[
             TextButton(
               child: const Text('Fechar'),
@@ -52,130 +48,118 @@ class _RegisterPageState extends State<LoginPage> {
           ],
         ),
       );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Menu()),
+      );
+    }
+    //await insertContato(novoContato);
+  }
+
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      // Envio de e-mail de recuperação de senha bem-sucedido
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Sucesso'),
+            content: Text(
+                'Um e-mail de recuperação de senha foi enviado para $email.'),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } catch (error) {
+      // Tratamento de erro
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Erro'),
+            content: Text(
+                'Não foi possível enviar o e-mail de recuperação de senha.'),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Login",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2.0,
+        appBar: AppBar(
+          title: const Text(
+            "Login",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2.0,
+            ),
           ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Image.asset(
-                'assets/images/user.png',
-                width: 100,
-                height: 150,
-              ),
-              const SizedBox(height: 16.0),
-              TextField(
-                controller: _emailController,
-                decoration: const InputDecoration(labelText: 'E-mail'),
-                onChanged: (value) => {value.isNotEmpty},
-              ),
-              const SizedBox(height: 1.0),
-              TextField(
-                  controller: _senhaController,
-                  obscureText: true,
-                  decoration: const InputDecoration(labelText: 'Senha'),
-                  onChanged: (value) => {value.isNotEmpty}),
-              const SizedBox(height: 24.0),
-              ElevatedButton(
-                onPressed: _cadastrar,
-                child: const Text('Entrar'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  const HomePage({
-    super.key,
-    required this.email,
-    required this.senha,
-  });
-
-  final String? email;
-  final String? senha;
-
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Profile",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2.0,
-          ),
-        ),
-        backgroundColor: Colors.blueGrey[900],
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(20.0),
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.grey, Colors.white],
-          ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: Text(
-                  'Email: ${widget.email}!',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey[900],
-                    letterSpacing: 1.5,
+        body: Container(
+          margin: EdgeInsets.fromLTRB(16.0, 60, 16.0, 0),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(1.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Image.asset(
+                    'assets/images/IFPI.png',
+                    width: 100,
+                    height: 150,
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Text(
-                  'Sua senha é:${widget.senha}!',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    color: Colors.blueGrey[900],
-                    letterSpacing: 1.2,
+                  TextField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(labelText: 'E-mail'),
+                    onChanged: (value) => {value.isNotEmpty},
                   ),
-                  textAlign: TextAlign.center,
-                ),
+                  const SizedBox(height: 1.0),
+                  TextField(
+                      controller: _senhaController,
+                      obscureText: true,
+                      decoration: const InputDecoration(labelText: 'Senha'),
+                      onChanged: (value) => {value.isNotEmpty}),
+                  const SizedBox(height: 24.0),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PasswordResetScreen()),
+                      );
+                    },
+                    child: const Text('Esqueceu a senha?'),
+                  ),
+                  const SizedBox(height: 10.0),
+                  ElevatedButton(
+                    onPressed: _cadastrar,
+                    child: const Text('Entrar'),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
