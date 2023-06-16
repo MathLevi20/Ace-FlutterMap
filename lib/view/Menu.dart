@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maps/view/Login.dart';
 import 'package:maps/view/MapView.dart';
+import 'package:maps/view/profile.dart';
 
 import '../database/auth.dart';
 import 'ListUser.dart';
@@ -65,7 +66,7 @@ class Menu extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const ListUser()));
+                                  builder: (context) => ProfileScreen()));
                         },
                         child: const Text('Profile',
                             style: TextStyle(fontSize: 18.0))),
