@@ -18,7 +18,7 @@ class _RegisterUserState extends State<RegisterUser> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   PickedFile? pickedImage;
-  File? imageFile;
+  File? imageFile  ;
   bool _load = false; // Initialize with null
   String _errorMessage = '';
 
@@ -80,6 +80,8 @@ class _RegisterUserState extends State<RegisterUser> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Registro'),
+        backgroundColor: Color.fromARGB(255, 63, 0, 209),
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16.0, 60, 16.0, 0),
@@ -97,12 +99,24 @@ class _RegisterUserState extends State<RegisterUser> {
               TextButton(
                 onPressed: _pickImage,
                 child: Text('Escolher Foto'),
+                style: TextButton.styleFrom(
+                  foregroundColor: Color.fromARGB(255, 63, 0, 209),
+                ),
               ),
               const SizedBox(height: 16.0),
               TextField(
                 controller: _usernameController,
                 decoration: const InputDecoration(
-                  labelText: 'Nome de Usuário',
+                  labelText: 'Nome do Usuário',
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Color.fromARGB(255, 63, 0, 209), width: 1.0),
+                  ),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 86, 86, 86), width: 0.0),
+                  ),
+                  labelStyle: TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
                 ),
               ),
               const SizedBox(height: 16.0),
@@ -110,6 +124,15 @@ class _RegisterUserState extends State<RegisterUser> {
                 controller: _emailController,
                 decoration: const InputDecoration(
                   labelText: 'E-mail',
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Color.fromARGB(255, 63, 0, 209), width: 1.0),
+                  ),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 86, 86, 86), width: 0.0),
+                  ),
+                  labelStyle: TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
                 ),
               ),
               const SizedBox(height: 16.0),
@@ -117,14 +140,28 @@ class _RegisterUserState extends State<RegisterUser> {
                 controller: _passwordController,
                 decoration: const InputDecoration(
                   labelText: 'Senha',
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Color.fromARGB(255, 63, 0, 209), width: 1.0),
+                  ),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 86, 86, 86), width: 0.0),
+                  ),
+                  labelStyle: TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
                 ),
                 obscureText: true,
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: _registerUser,
-                child: const Text('Registrar'),
-              ),
+                  onPressed: _registerUser,
+                  child: const Text('Registrar'),
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(EdgeInsets.all(15)),
+                    backgroundColor: MaterialStateProperty.all(
+                      Color.fromARGB(255, 63, 0, 209),
+                    ),
+                  )),
               const SizedBox(height: 8.0),
               Text(
                 _errorMessage,

@@ -1,7 +1,12 @@
+import 'dart:ffi';
+import 'package:geocoding/geocoding.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:maps/view/ProfileUser.dart';
+import 'package:maps/view/UsersProfileView.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class ListUser extends StatefulWidget {
   const ListUser({Key? key});
@@ -10,10 +15,29 @@ class ListUser extends StatefulWidget {
   _ListUserState createState() => _ListUserState();
 }
 
+Future<List<double>> getCoordinatesFromAddress(String address) async {
+  try {
+    List<Location> locations = await locationFromAddress(address);
+
+    if (locations.isNotEmpty) {
+      double latitude = locations.first.latitude;
+      double longitude = locations.first.longitude;
+      print(latitude);
+      print(longitude);
+      return [latitude, longitude];
+    }
+  } catch (e) {
+    print('Erro ao obter as coordenadas: $e');
+  }
+
+  return [];
+}
+
 class _ListUserState extends State<ListUser> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
   final TextEditingController _name = TextEditingController();
   final TextEditingController _locationLong = TextEditingController();
   final TextEditingController _locationLat = TextEditingController();
@@ -41,14 +65,14 @@ class _ListUserState extends State<ListUser> {
   @override
   Widget build(BuildContext context) {
     final gradientColors = [
-      Color.fromARGB(255, 140, 111, 208),
-      Color(0xFF2C0F6E),
+      Color.fromARGB(255, 63, 0, 209),
+      Color.fromARGB(255, 138, 0, 209)
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Contact'),
-        backgroundColor: Color.fromARGB(255, 140, 111, 208),
+        title: const Text('Contato'),
+        backgroundColor: Color.fromARGB(255, 63, 0, 209),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -61,7 +85,7 @@ class _ListUserState extends State<ListUser> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(1.0),
               child: Column(
                 children: [
                   ElevatedButton(
@@ -99,55 +123,58 @@ class _ListUserState extends State<ListUser> {
                       final lat = user['lat'];
                       final description = user['description'];
 
-                      return ListTile(
-                        title: Text(
-                          name,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        subtitle: Text(
-                          'Long = $long, Lat = $lat',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 14.0,
-                          ),
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfileScreen(
-                              profileUid: userUID!,
-                              profileId: users[index].id,
+                      return Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Card(
+                              child: ListTile(
+                            title: Text(
+                              name,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                _deleteUser(users[index].id);
-                              },
+                            subtitle: Text(
+                              'Long = $long, Lat = $lat',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 14.0,
+                              ),
                             ),
-                            IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () {
-                                _showEditDialog(
-                                  users[index].id,
-                                  name,
-                                  description,
-                                  lat,
-                                  long,
-                                );
-                              },
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProfileScreen(
+                                  profileUid: userUID!,
+                                  profileId: users[index].id,
+                                ),
+                              ),
                             ),
-                          ],
-                        ),
-                      );
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.delete),
+                                  onPressed: () {
+                                    _deleteUser(users[index].id);
+                                  },
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    _showEditDialog(
+                                      users[index].id,
+                                      name,
+                                      description,
+                                      lat,
+                                      long,
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          )));
                     },
                   );
                 },
@@ -163,14 +190,13 @@ class _ListUserState extends State<ListUser> {
     String userId,
     String currentName,
     String currentDescription,
-    String currentLat,
-    String currentLong,
+    double currentLat,
+    double currentLong,
   ) {
     _name.text = currentName;
     _description.text = currentDescription;
-    _locationLong.text = currentLong;
-    _locationLat.text = currentLat;
-
+    _locationLong.text = currentLong.toString();
+    _locationLat.text = currentLat.toString();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -234,7 +260,7 @@ class _ListUserState extends State<ListUser> {
               },
               child: const Text('Salvar'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.pink,
+                backgroundColor: Colors.white,
               ),
             ),
           ],
@@ -276,16 +302,9 @@ class _ListUserState extends State<ListUser> {
                     ),
                     const SizedBox(height: 16.0),
                     TextField(
-                      controller: _locationLatController,
+                      controller: _addressController,
                       decoration: const InputDecoration(
-                        labelText: 'Localização Latitude',
-                      ),
-                    ),
-                    const SizedBox(height: 16.0),
-                    TextField(
-                      controller: _locationLongController,
-                      decoration: const InputDecoration(
-                        labelText: 'Localização Longitude',
+                        labelText: 'Endereço',
                       ),
                     ),
                   ],
@@ -339,9 +358,23 @@ class _ListUserState extends State<ListUser> {
 
   void _createUser() async {
     final name = _nameController.text;
-    final long = double.parse(_locationLongController.text);
-    final lat = double.parse(_locationLatController.text);
     final description = _descriptionController.text;
+    final address = _addressController.text;
+    double? latitude;
+    double? longitude;
+
+    try {
+      List<Location> locations = await locationFromAddress(address);
+
+      if (locations.isNotEmpty) {
+        latitude = locations.first.latitude;
+        longitude = locations.first.longitude;
+        print(latitude);
+        print(longitude);
+      }
+    } catch (e) {
+      print('Erro ao obter as coordenadas: $e');
+    }
 
     await _firestore
         .collection('users')
@@ -350,8 +383,9 @@ class _ListUserState extends State<ListUser> {
         .add({
       'name': name,
       'description': description,
-      'lat': lat,
-      'long': long,
+      'address': address,
+      'lat': latitude,
+      'long': longitude,
     });
 
     _nameController.clear();
