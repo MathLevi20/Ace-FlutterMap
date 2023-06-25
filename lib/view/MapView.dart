@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -35,6 +36,10 @@ class _GoogleMapState extends State<GoogleMaps> {
   TextEditingController address1Controller = TextEditingController();
   TextEditingController address2Controller = TextEditingController();
 
+  Set<Polyline> _polyline = Set<Polyline>();
+  List<LatLng> polylineCoordinates = [];
+  late PolylinePoints polylinePoints;
+
   Future<void> _localizacaoAtual() async {
     try {
       Position position = await Geolocator.getCurrentPosition(
@@ -61,7 +66,7 @@ class _GoogleMapState extends State<GoogleMaps> {
     );
     final icon_2 = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(size: Size(60, 60)), // Icon size
-      "assets/images/user.png", // Image file path
+      "assets/images/arrow.png", // Image file path
     );
 
     try {
@@ -191,13 +196,24 @@ class _GoogleMapState extends State<GoogleMaps> {
     });
   }
 
+  late bool _isColumnVisible =  false;
+
+  void _toggleColumnVisibility() {
+    setState(() {
+      _isColumnVisible = !_isColumnVisible;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: const Text("Google Maps"),
+          title: const Text("Mapa"),
+          
+            centerTitle: true,
+            elevation: 0,
         ),
         body: const Center(
           child: CircularProgressIndicator(),
@@ -207,31 +223,40 @@ class _GoogleMapState extends State<GoogleMaps> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: const Text("Google Maps"),
+          title: const Text("Mapa"),
+          centerTitle: true,
+          elevation: 0,
         ),
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: address1Controller,
-                decoration: const InputDecoration(
-                  labelText: 'Address 1',
-                ),
+            Visibility(
+              visible: _isColumnVisible,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: address1Controller,
+                      decoration: const InputDecoration(
+                        labelText: 'Address 1',
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: address2Controller,
+                      decoration: const InputDecoration(
+                        labelText: 'Address 2',
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: _onSearchButtonPressed,
+                    child: const Text('Search'),
+                  ),
+                ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: address2Controller,
-                decoration: const InputDecoration(
-                  labelText: 'Address 2',
-                ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: _onSearchButtonPressed,
-              child: const Text('Search'),
             ),
             Expanded(
               child: GoogleMap(
@@ -250,6 +275,15 @@ class _GoogleMapState extends State<GoogleMaps> {
             ),
           ],
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _toggleColumnVisibility();
+          },
+          child: Icon(Icons.search), // Ícone do botão
+          backgroundColor: Colors.blue, // Cor de fundo do botão
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+
       );
     }
   }
