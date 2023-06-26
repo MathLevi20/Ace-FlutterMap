@@ -7,6 +7,7 @@ import 'package:uuid/uuid.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: LoginPage(),

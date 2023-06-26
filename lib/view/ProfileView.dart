@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'LoginView.dart';
+
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -12,11 +14,11 @@ class ProfileScreen extends StatelessWidget {
           'Profile',
           style: TextStyle(
             fontFamily: 'NeonTubes2',
-            fontSize: 24,
             letterSpacing: 2,
           ),
         ),
-        backgroundColor: Color(0xFF130063),
+        backgroundColor: Color.fromARGB(255, 63, 0, 209),
+        centerTitle: true,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -24,87 +26,81 @@ class ProfileScreen extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF1F0954),
-              Color(0xFF2C0F6E),
-            ],
+              Color.fromARGB(255, 171, 4, 255),
+              Color.fromARGB(255, 138, 0, 209),
+              Color.fromARGB(255, 63, 0, 209),            ],
           ),
         ),
         child: Center(
           child: Card(
-            margin: EdgeInsets.fromLTRB(10, 180, 10, 180),
+            color: Color.fromARGB(255, 255, 255, 255) ,
             elevation: 4,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Padding(
-              padding: EdgeInsets.all(30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: NetworkImage(user?.photoURL ??
-                        'https://firebasestorage.googleapis.com/v0/b/pointer-flutter.appspot.com/o/user.png?alt=media&token=4d995d18-251d-4d18-9971-8b8346372aeb'),
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    ' ${user?.displayName ?? ''}',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'NeonTubes2',
-                      color: Colors.black,
-                      shadows: [
-                        Shadow(
-                          color: Colors.pinkAccent.withOpacity(0.8),
-                          offset: Offset(2, 2),
-                          blurRadius: 4,
-                        ),
-                      ],
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: NetworkImage(user?.photoURL ??
+                          'https://firebasestorage.googleapis.com/v0/b/pointer-flutter.appspot.com/o/user.png?alt=media&token=4d995d18-251d-4d18-9971-8b8346372aeb'),
                     ),
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    '${user?.email ?? ''}',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontFamily: 'NeonTubes2',
-                      color: Colors.black,
-                      shadows: [
-                        Shadow(
-                          color: Colors.pinkAccent.withOpacity(0.8),
-                          offset: Offset(2, 2),
-                          blurRadius: 4,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await FirebaseAuth.instance.signOut();
-                      // Navegue para a tela de login ou qualquer tela desejada após o logout
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFAE00FF),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      shadowColor: Colors.pinkAccent.withOpacity(0.8),
-                      elevation: 4,
-                    ),
-                    child: Text(
-                      'Logout',
+                    SizedBox(height: 16),
+                    Text(
+                      'User: ${user?.displayName ?? ''}',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontFamily: 'NeonTubes2',
-                        color: Colors.white,
-                        letterSpacing: 1,
+                        color: Color.fromARGB(255, 64, 64, 64),
+  
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 10),
+                    Text(
+                      'Email: ${user?.email ?? ''}',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'NeonTubes2',
+                            color: const Color.fromARGB(255, 64, 64, 64),
+      
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await FirebaseAuth.instance.signOut();
+           Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginPage()));
+
+                        },                      
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 171, 4, 255),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 32, vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        shadowColor: Colors.pinkAccent.withOpacity(0.8),
+                        elevation: 4,
+                      ),
+                      child: Text(
+                        'Logout',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'NeonTubes2',
+                          color: Colors.white,
+                          letterSpacing: 2,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

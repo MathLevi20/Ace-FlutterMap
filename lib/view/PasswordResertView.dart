@@ -18,79 +18,83 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
         backgroundColor: Color.fromARGB(255, 63, 0, 209),
         elevation: 0,
       ),
-           body: Container(
-      child: SingleChildScrollView( child:Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 60.0),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(75, 10, 75, 0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10), // Image border
-                  child: SizedBox.fromSize(
-                    size: Size.fromRadius(100), // Image radius
-                    child: Image.asset('assets/images/Logo-Isaf.png',
-                        fit: BoxFit.cover),
+      body: Container(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 10.0),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(75, 10, 75, 10),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10), // Image border
+                      child: SizedBox.fromSize(
+                        size: Size.fromRadius(100), // Image radius
+                        child: Image.asset(
+                          'assets/images/logo.png',
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 15.0),
+                  Center(
+                    child: Text(
+                      'Insira seu e-mail para recuperar a senha',
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  TextFormField(
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Por favor, insira um e-mail válido.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _email = value!;
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Color.fromARGB(255, 63, 0, 209), width: 1.0),
+                      ),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            color: Color.fromARGB(255, 86, 86, 86), width: 0.0),
+                      ),
+                      border: OutlineInputBorder(),
+                      labelStyle:
+                          TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        sendPasswordResetEmail(_email);
+                      }
+                    },
+                    child: Text('Recuperar Senha'),
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all(EdgeInsets.all(15)),
+                      backgroundColor: MaterialStateProperty.all(
+                        Color.fromARGB(255, 63, 0, 209),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 15.0),
-
-             Center(child: Text(
-                'Insira seu e-mail para recuperar a senha',
-                style: TextStyle(fontSize: 16.0),
-              ),), 
-              SizedBox(height: 10.0),
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, insira um e-mail válido.';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _email = value!;
-                },
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Color.fromARGB(255, 63, 0, 209), width: 1.0),
-                  ),
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        color: Color.fromARGB(255, 86, 86, 86), width: 0.0),
-                  ),
-                  border: OutlineInputBorder(),
-                  labelStyle: TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    sendPasswordResetEmail(_email);
-                  }
-                },
-                child: Text('Recuperar Senha'),
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all(EdgeInsets.all(15)),
-                  backgroundColor: MaterialStateProperty.all(
-                    Color.fromARGB(255, 63, 0, 209),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
-      ),
-      ),
       ),
     );
   }

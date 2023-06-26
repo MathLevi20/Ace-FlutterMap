@@ -106,23 +106,19 @@ class _RegisterPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-      margin: EdgeInsets.fromLTRB(16.0, 60, 16.0, 0),
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(1.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               const SizedBox(height: 70.0),
               Padding(
                 padding: const EdgeInsets.fromLTRB(75, 10, 75, 0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10), // Image border
-                  child: SizedBox.fromSize(
-                    size: Size.fromRadius(100), // Image radius
-                    child: Image.asset('assets/images/Logo-Isaf.png',
-                        fit: BoxFit.cover),
-                  ),
+                child: SizedBox.fromSize(
+                  size: Size.fromRadius(100), // Image radius
+                  child: Image.asset('assets/images/logo.png',
+                     ),
                 ),
               ),
               const SizedBox(height: 30.0),
@@ -197,6 +193,8 @@ class _RegisterPageState extends State<LoginPage> {
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
+
             ],
           ),
         ),

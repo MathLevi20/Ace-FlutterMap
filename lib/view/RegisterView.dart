@@ -84,12 +84,12 @@ class _RegisterUserState extends State<RegisterUser> {
         elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(16.0, 60, 16.0, 0),
+        padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 50.0),
               CircleAvatar(
                 radius: 50.0,
                 backgroundImage: imageFile != null

@@ -52,26 +52,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
       final icon_3 = await BitmapDescriptor.fromAssetImage(
         const ImageConfiguration(size: Size(60, 60)), // Icon size
-        "assets/images/arrow.png", // Image file path
+        "assets/images/arrow-new.png", // Image file path
       );
 
       if (data != null) {
         LatLng latLng = LatLng(data['lat'].toDouble(), data['long'].toDouble());
-        Marker user = Marker(
-          markerId: const MarkerId('IFPI Central'),
-          position: LatLng(data['lat'].toDouble(), data['long'].toDouble()),
-          draggable: true,
-          icon: icon_3,
-          infoWindow: const InfoWindow(
-            title: 'Levi',
-            snippet:
-                "Instituição de ensino superior referência, formando profissionais capacitados.",
-          ),
-        );
-        markers.add(user);
 
         print('Localização: $latLng');
-  
+
         setState(() {
           _center = latLng;
 
@@ -84,6 +72,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
           email = data['email'] ?? "";
           _isLoading = false;
         });
+        Marker user = Marker(
+          markerId:MarkerId(data['name']),
+          position: LatLng(data['lat'].toDouble(), data['long'].toDouble()),
+          draggable: true,
+          icon: icon_3,
+          infoWindow: InfoWindow(
+            title: data['name'],
+            snippet: data['description'],
+          ),
+        );
+        markers.add(user);
       }
     }
   }
@@ -98,137 +97,131 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: const Text("Mapa"),
-          centerTitle: true,
-          elevation: 0,
-        ),
         body: const Center(
           child: CircularProgressIndicator(),
         ),
       );
     } else {
-      return Scaffold(
+      return
+       
+      Scaffold(
+        
         body: Center(
           child: Column(
             children: [
-              Expanded(
-                child: GoogleMap(
-                    mapType: MapType.terrain,
-                    compassEnabled: true,
-                    indoorViewEnabled: true,
-                    myLocationEnabled: true,
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: _center,
-                      zoom: 17.0,
-                    ),
-                    markers: markers),
-              ),
-              Card(
-                color: Color.fromARGB(255, 63, 0, 209),
-                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+              Container(
+                child: Expanded(
+                  child: GoogleMap(
+                      mapType: MapType.terrain,
+                      compassEnabled: true,
+                      indoorViewEnabled: true,
+                      myLocationEnabled: true,
+                      zoomGesturesEnabled: true,
+                      onMapCreated: _onMapCreated,
+                      initialCameraPosition: CameraPosition(
+                        target: _center,
+                        zoom: 17.0,
+                      ),
+                      markers: markers),
                 ),
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 180, 0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 16),
-                      Text(
-                        '${name.toUpperCase() ?? ''}',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'NeonTubes2',
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        '${description.toUpperCase() ?? ''}',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'NeonTubes2',
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        '${phone ?? ''}',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'NeonTubes2',
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        '${email.toUpperCase() ?? ''}',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'NeonTubes2',
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        '${latitude ?? ''}',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'NeonTubes2',
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        '${longitude ?? ''}',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'NeonTubes2',
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () async {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ListUser()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Color(0xFFAE00FF),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 32, vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+              ),
+              Container(
+                height: 220,
+                margin: EdgeInsets.all(10.0),
+                alignment: Alignment.topCenter,
+                child: Card(
+                  color: Color.fromARGB(255, 63, 0, 209),
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 210, 0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(height: 16),
+                          Text(
+                            'Nome: ${name ?? ''}',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'NeonTubes2',
+                              color: Colors.white,
+                            ),
                           ),
-                          shadowColor: Colors.pinkAccent.withOpacity(0.8),
-                          elevation: 4,
-                        ),
-                        child: Text(
-                          'Logout',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontFamily: 'NeonTubes2',
-                            color: Colors.white,
-                            letterSpacing: 1,
+                          SizedBox(height: 16),
+                          Text(
+                            'Descrição: ${description.toUpperCase() ?? ''}',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'NeonTubes2',
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
+                          SizedBox(height: 16),
+                          Text(
+                            'Telefone: ${phone ?? ''}',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'NeonTubes2',
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            'Email: ${email ?? ''}',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'NeonTubes2',
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            'Latitude: ${latitude ?? ''}',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'NeonTubes2',
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            'Longitude: ${longitude ?? ''}',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'NeonTubes2',
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
             ],
           ),
         ),
+        floatingActionButton: Container(
+          margin: EdgeInsets.only(top: 15.0),
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.arrow_back_sharp), // Ícone do botão
+            backgroundColor: Color.fromARGB(255, 63, 0, 209),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                  5.0), // Set the desired radius for a square shape
+            ), // Cor de fundo do botão
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
       );
     }
   }

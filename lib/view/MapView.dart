@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -66,7 +67,7 @@ class _GoogleMapState extends State<GoogleMaps> {
     );
     final icon_2 = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(size: Size(60, 60)), // Icon size
-      "assets/images/arrow.png", // Image file path
+      "assets/images/arrow-new.png", // Image file path
     );
 
     try {
@@ -186,7 +187,7 @@ class _GoogleMapState extends State<GoogleMaps> {
       polylines.add(
         Polyline(
             polylineId: const PolylineId('route'),
-            color: Colors.blue,
+            color: Color.fromARGB(255, 63, 0, 209),
             points: routeCoordinates,
             width: 4,
             visible: true,
@@ -196,7 +197,7 @@ class _GoogleMapState extends State<GoogleMaps> {
     });
   }
 
-  late bool _isColumnVisible =  false;
+  late bool _isColumnVisible = false;
 
   void _toggleColumnVisibility() {
     setState(() {
@@ -208,54 +209,77 @@ class _GoogleMapState extends State<GoogleMaps> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: const Text("Mapa"),
-          
-            centerTitle: true,
-            elevation: 0,
-        ),
         body: const Center(
           child: CircularProgressIndicator(),
         ),
       );
     } else {
       return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: const Text("Mapa"),
-          centerTitle: true,
-          elevation: 0,
-        ),
         body: Column(
           children: [
             Visibility(
               visible: _isColumnVisible,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: address1Controller,
-                      decoration: const InputDecoration(
-                        labelText: 'Address 1',
+              child: Container(
+                
+                margin: EdgeInsets.only(top:35.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: address1Controller,
+                        decoration: const InputDecoration(
+                          labelText: 'Partida',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 63, 0, 209),
+                                width: 1.0),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 86, 86, 86),
+                                width: 0.0),
+                          ),
+                          labelStyle:
+                              TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: address2Controller,
-                      decoration: const InputDecoration(
-                        labelText: 'Address 2',
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: address2Controller,
+                        decoration: InputDecoration(
+                          labelText: 'Destino',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 63, 0, 209),
+                                width: 1.0),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 86, 86, 86),
+                                width: 0.0),
+                          ),
+                          labelStyle:
+                              TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
+                        ),
                       ),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: _onSearchButtonPressed,
-                    child: const Text('Search'),
-                  ),
-                ],
+                    ElevatedButton(
+                      onPressed: _onSearchButtonPressed,
+                      child: const Text('Procurar'),
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(EdgeInsets.all(15)),
+                        backgroundColor: MaterialStateProperty.all(
+                          Color.fromARGB(255, 63, 0, 209),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 15.0),
+
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -275,15 +299,21 @@ class _GoogleMapState extends State<GoogleMaps> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _toggleColumnVisibility();
-          },
-          child: Icon(Icons.search), // Ícone do botão
-          backgroundColor: Colors.blue, // Cor de fundo do botão
+        floatingActionButton: Container(
+          margin: EdgeInsets.only(bottom: 15.0),
+          height: 50,
+          width: 50,
+          child: FloatingActionButton(
+            onPressed: () {
+              _toggleColumnVisibility();
+            },
+            child: Icon(Icons.search), // Ícone do botão
+            backgroundColor: Color.fromARGB(255, 63, 0, 209),
+            // Cor de fundo do botão
+          ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniStartFloat,
       );
     }
   }

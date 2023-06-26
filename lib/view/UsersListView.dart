@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:maps/view/UsersProfileView.dart';
 
-
 class ListUser extends StatefulWidget {
   const ListUser({Key? key});
 
@@ -66,15 +65,16 @@ class _ListUserState extends State<ListUser> {
   @override
   Widget build(BuildContext context) {
     final gradientColors = [
+      Color.fromARGB(255, 171, 4, 255),
+      Color.fromARGB(255, 138, 0, 209),
       Color.fromARGB(255, 63, 0, 209),
-      Color.fromARGB(255, 138, 0, 209)
     ];
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Contato'),
+        centerTitle: true,
         backgroundColor: Color.fromARGB(255, 63, 0, 209),
-        elevation: 0,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -93,9 +93,12 @@ class _ListUserState extends State<ListUser> {
                   const SizedBox(height: 4.0),
                   ElevatedButton(
                     onPressed: _showCreateDialog,
-                    child: const Text('Criar Usuário'),
+                    child: const Text('Criar Usuário',
+                      textAlign: TextAlign.center, // Centralizar o título
+                    ),
+                    
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.pink,
+                      backgroundColor: Color.fromARGB(255, 116, 0, 174),
                     ),
                   ),
                   const SizedBox(height: 4.0),
@@ -129,7 +132,7 @@ class _ListUserState extends State<ListUser> {
                       final email = user['email'] ?? "";
 
                       return Padding(
-                          padding: const EdgeInsets.all(19.0),
+                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                           child: Card(
                               child: ListTile(
                             title: Text(
@@ -143,7 +146,7 @@ class _ListUserState extends State<ListUser> {
                             subtitle: Text(
                               '$description',
                               style: TextStyle(
-                                color: Colors.blue,
+                                color: Color.fromARGB(255, 64, 64, 64),
                                 fontSize: 14.0,
                               ),
                             ),
@@ -161,12 +164,14 @@ class _ListUserState extends State<ListUser> {
                               children: [
                                 IconButton(
                                   icon: const Icon(Icons.delete),
+                                  color: Color.fromARGB(255, 63, 0, 209),
                                   onPressed: () {
                                     _deleteUser(users[index].id);
                                   },
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.edit),
+                                  color: Color.fromARGB(255, 63, 0, 209),
                                   onPressed: () {
                                     _showEditDialog(users[index].id, name,
                                         description, address, phone, email);
@@ -210,7 +215,6 @@ class _ListUserState extends State<ListUser> {
           title: const Text('Editar Usuário'),
           content: Container(
             width: MediaQuery.of(context).size.width * 0.8,
-            padding: const EdgeInsets.all(1.0),
             child: ListView(
               shrinkWrap: true,
               children: [
@@ -218,39 +222,99 @@ class _ListUserState extends State<ListUser> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextField(
-                      controller: _name,
-                      decoration: const InputDecoration(
-                        labelText: 'Nome',
-                      ),
-                    ),
-                    const SizedBox(height: 4.0),
-                    TextField(
-                      controller: _description,
-                      decoration: const InputDecoration(
-                        labelText: 'Descrição',
-                      ),
-                    ),
+                        controller: _name,
+                        decoration: const InputDecoration(
+                          labelText: 'Nome',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 63, 0, 209),
+                                width: 1.0),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 86, 86, 86),
+                                width: 0.0),
+                          ),
+                          labelStyle:
+                              TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
+                        ),
+                        onChanged: (value) => {value.isNotEmpty}),
                     const SizedBox(height: 16.0),
                     TextField(
-                      controller: _address,
-                      decoration: const InputDecoration(
-                        labelText: 'Endereço',
-                      ),
-                    ),
+                        controller: _description,
+                        decoration: const InputDecoration(
+                          labelText: 'Descrição',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 63, 0, 209),
+                                width: 1.0),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 86, 86, 86),
+                                width: 0.0),
+                          ),
+                          labelStyle:
+                              TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
+                        ),
+                        onChanged: (value) => {value.isNotEmpty}),
                     const SizedBox(height: 16.0),
                     TextField(
-                      controller: _email,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                      ),
-                    ),
+                        controller: _address,
+                        decoration: const InputDecoration(
+                          labelText: 'Endereço',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 63, 0, 209),
+                                width: 1.0),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 86, 86, 86),
+                                width: 0.0),
+                          ),
+                          labelStyle:
+                              TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
+                        ),
+                        onChanged: (value) => {value.isNotEmpty}),
                     const SizedBox(height: 16.0),
                     TextField(
-                      controller: _phone,
-                      decoration: const InputDecoration(
-                        labelText: 'Telefone',
-                      ),
-                    ),
+                        controller: _email,
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 63, 0, 209),
+                                width: 1.0),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 86, 86, 86),
+                                width: 0.0),
+                          ),
+                          labelStyle:
+                              TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
+                        ),
+                        onChanged: (value) => {value.isNotEmpty}),
+                    const SizedBox(height: 16.0),
+                    TextField(
+                        controller: _phone,
+                        decoration: const InputDecoration(
+                          labelText: 'Telefone',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 63, 0, 209),
+                                width: 1.0),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 86, 86, 86),
+                                width: 0.0),
+                          ),
+                          labelStyle:
+                              TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
+                        ),
+                        onChanged: (value) => {value.isNotEmpty}),
                   ],
                 ),
               ],
@@ -262,6 +326,10 @@ class _ListUserState extends State<ListUser> {
                 Navigator.of(context).pop();
               },
               child: const Text('Cancelar'),
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(
+                    Color.fromARGB(255, 63, 0, 209)), // Set the text color
+              ),
             ),
             ElevatedButton(
               onPressed: () {
@@ -270,7 +338,7 @@ class _ListUserState extends State<ListUser> {
               },
               child: const Text('Salvar'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor: Color.fromARGB(255, 63, 0, 209),
               ),
             ),
           ],
@@ -288,6 +356,7 @@ class _ListUserState extends State<ListUser> {
             borderRadius: BorderRadius.circular(16.0),
           ),
           title: const Text('Criar Usuário'),
+          
           content: Container(
             width: MediaQuery.of(context).size.width * 0.8,
             padding: const EdgeInsets.all(1.0),
@@ -298,39 +367,99 @@ class _ListUserState extends State<ListUser> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextField(
-                      controller: _nameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Nome',
-                      ),
-                    ),
+                        controller: _nameController,
+                        decoration: const InputDecoration(
+                          labelText: 'Nome',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 63, 0, 209),
+                                width: 1.0),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 86, 86, 86),
+                                width: 0.0),
+                          ),
+                          labelStyle:
+                              TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
+                        ),
+                        onChanged: (value) => {value.isNotEmpty}),
                     const SizedBox(height: 16.0),
                     TextField(
-                      controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        labelText: 'Descrição',
-                      ),
-                    ),
+                        controller: _descriptionController,
+                        decoration: const InputDecoration(
+                          labelText: 'Descrição',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 63, 0, 209),
+                                width: 1.0),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 86, 86, 86),
+                                width: 0.0),
+                          ),
+                          labelStyle:
+                              TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
+                        ),
+                        onChanged: (value) => {value.isNotEmpty}),
                     const SizedBox(height: 16.0),
                     TextField(
-                      controller: _addressController,
-                      decoration: const InputDecoration(
-                        labelText: 'Endereço',
-                      ),
-                    ),
+                        controller: _addressController,
+                        decoration: const InputDecoration(
+                          labelText: 'Endereço',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 63, 0, 209),
+                                width: 1.0),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 86, 86, 86),
+                                width: 0.0),
+                          ),
+                          labelStyle:
+                              TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
+                        ),
+                        onChanged: (value) => {value.isNotEmpty}),
                     const SizedBox(height: 16.0),
                     TextField(
-                      controller: _phoneController,
-                      decoration: const InputDecoration(
-                        labelText: 'Telefone',
-                      ),
-                    ),
+                        controller: _phoneController,
+                        decoration: const InputDecoration(
+                          labelText: 'Telefone',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 63, 0, 209),
+                                width: 1.0),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 86, 86, 86),
+                                width: 0.0),
+                          ),
+                          labelStyle:
+                              TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
+                        ),
+                        onChanged: (value) => {value.isNotEmpty}),
                     const SizedBox(height: 16.0),
                     TextField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                      ),
-                    ),
+                        controller: _emailController,
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 63, 0, 209),
+                                width: 1.0),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 86, 86, 86),
+                                width: 0.0),
+                          ),
+                          labelStyle:
+                              TextStyle(color: Color.fromARGB(255, 86, 86, 86)),
+                        ),
+                        onChanged: (value) => {value.isNotEmpty}),
                   ],
                 ),
               ],
@@ -342,6 +471,10 @@ class _ListUserState extends State<ListUser> {
                 Navigator.of(context).pop();
               },
               child: const Text('Cancelar'),
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(
+                    Color.fromARGB(255, 63, 0, 209)), // Set the text color
+              ),
             ),
             ElevatedButton(
               onPressed: () {
@@ -349,6 +482,9 @@ class _ListUserState extends State<ListUser> {
                 Navigator.of(context).pop();
               },
               child: const Text('Salvar'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 63, 0, 209),
+              ),
             ),
           ],
         );
