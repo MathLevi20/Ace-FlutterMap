@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'UsersListView.dart';
-
 class ProfileScreen extends StatefulWidget {
   final String profileId;
   final String profileUid;
@@ -73,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _isLoading = false;
         });
         Marker user = Marker(
-          markerId:MarkerId(data['name']),
+          markerId: MarkerId(data['name']),
           position: LatLng(data['lat'].toDouble(), data['long'].toDouble()),
           draggable: true,
           icon: icon_3,
@@ -102,10 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       );
     } else {
-      return
-       
-      Scaffold(
-        
+      return Scaffold(
         body: Center(
           child: Column(
             children: [
@@ -145,7 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: <Widget>[
                           SizedBox(height: 16),
                           Text(
-                            'Nome: ${name ?? ''}',
+                            'Nome: ${name}',
                             style: TextStyle(
                               fontSize: 15,
                               fontFamily: 'NeonTubes2',
@@ -154,7 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           SizedBox(height: 16),
                           Text(
-                            'Descrição: ${description.toUpperCase() ?? ''}',
+                            'Descrição: ${description.toUpperCase()}',
                             style: TextStyle(
                               fontSize: 15,
                               fontFamily: 'NeonTubes2',
@@ -163,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           SizedBox(height: 16),
                           Text(
-                            'Telefone: ${phone ?? ''}',
+                            'Telefone: ${phone}',
                             style: TextStyle(
                               fontSize: 15,
                               fontFamily: 'NeonTubes2',
@@ -172,7 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           SizedBox(height: 16),
                           Text(
-                            'Email: ${email ?? ''}',
+                            'Email: ${email}',
                             style: TextStyle(
                               fontSize: 15,
                               fontFamily: 'NeonTubes2',
@@ -181,7 +176,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           SizedBox(height: 16),
                           Text(
-                            'Latitude: ${latitude ?? ''}',
+                            'Latitude: ${latitude}',
                             style: TextStyle(
                               fontSize: 15,
                               fontFamily: 'NeonTubes2',
@@ -190,7 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           SizedBox(height: 16),
                           Text(
-                            'Longitude: ${longitude ?? ''}',
+                            'Longitude: ${longitude}',
                             style: TextStyle(
                               fontSize: 15,
                               fontFamily: 'NeonTubes2',

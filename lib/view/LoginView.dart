@@ -3,7 +3,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maps/database/auth.dart';
-import 'package:maps/view/MapView.dart';
 import 'package:maps/view/MenuView.dart';
 import 'package:maps/view/PasswordResertView.dart';
 import 'package:maps/view/RegisterView.dart';
@@ -20,24 +19,24 @@ class _RegisterPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
-  Future<void> _cadastrar() async {
+  Future<void> _signIn() async {
     String password = _senhaController.text;
     String email = _emailController.text;
-    //User novoContato = User(
-    //id: DateTime.now().microsecondsSinceEpoch,
-    //email: email,
-    // senha: senha,
-    //);
     AuthService authService = AuthService();
 
     String loginResult =
         await authService.signInWithEmailAndPassword(email, password);
+    print(loginResult);
     if (loginResult.startsWith('Erro')) {
+      final errorMessage =
+          loginResult
+          .toString().replaceAll('Erro: [firebase_auth/unknown] ', '');
+
       showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: const Text('Erro!'),
-          content: Text(loginResult),
+          title: const Text('Erro'),
+          content: Text(errorMessage),
           actions: <Widget>[
             TextButton(
               child: const Text('Fechar'),
@@ -52,52 +51,6 @@ class _RegisterPageState extends State<LoginPage> {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Menu()),
-      );
-    }
-    //await insertContato(novoContato);
-  }
-
-  Future<void> sendPasswordResetEmail(String email) async {
-    try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      // Envio de e-mail de recuperação de senha bem-sucedido
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Sucesso'),
-            content: Text(
-                'Um e-mail de recuperação de senha foi enviado para $email.'),
-            actions: [
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    } catch (error) {
-      // Tratamento de erro
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Erro'),
-            content: Text(
-                'Não foi possível enviar o e-mail de recuperação de senha.'),
-            actions: [
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
       );
     }
   }
@@ -117,8 +70,9 @@ class _RegisterPageState extends State<LoginPage> {
                 padding: const EdgeInsets.fromLTRB(75, 10, 75, 0),
                 child: SizedBox.fromSize(
                   size: Size.fromRadius(100), // Image radius
-                  child: Image.asset('assets/images/logo.png',
-                     ),
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                  ),
                 ),
               ),
               const SizedBox(height: 30.0),
@@ -184,7 +138,7 @@ class _RegisterPageState extends State<LoginPage> {
                 child: const Text('Criar Conta'),
               ),
               ElevatedButton(
-                onPressed: _cadastrar,
+                onPressed: _signIn,
                 child: const Text('Entrar'),
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all(EdgeInsets.all(15)),
@@ -194,7 +148,6 @@ class _RegisterPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 20),
-
             ],
           ),
         ),

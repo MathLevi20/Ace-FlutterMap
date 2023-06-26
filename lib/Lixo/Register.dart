@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maps/model/Pessoa.dart';
 import 'package:uuid/uuid.dart';
-import '../database/database.dart';
+import 'database.dart';
 
 var uuid = const Uuid();
 

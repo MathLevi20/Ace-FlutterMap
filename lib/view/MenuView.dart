@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:maps/view/LoginView.dart';
 import 'package:maps/view/MapView.dart';
 import 'package:maps/view/ProfileView.dart';
-
-import '../database/auth.dart';
 import 'UsersListView.dart';
 
 class Menu extends StatelessWidget {

@@ -28,12 +28,13 @@ class ProfileScreen extends StatelessWidget {
             colors: [
               Color.fromARGB(255, 171, 4, 255),
               Color.fromARGB(255, 138, 0, 209),
-              Color.fromARGB(255, 63, 0, 209),            ],
+              Color.fromARGB(255, 63, 0, 209),
+            ],
           ),
         ),
         child: Center(
           child: Card(
-            color: Color.fromARGB(255, 255, 255, 255) ,
+            color: Color.fromARGB(255, 255, 255, 255),
             elevation: 4,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -56,7 +57,6 @@ class ProfileScreen extends StatelessWidget {
                         fontSize: 16,
                         fontFamily: 'NeonTubes2',
                         color: Color.fromARGB(255, 64, 64, 64),
-  
                       ),
                     ),
                     SizedBox(height: 10),
@@ -65,24 +65,22 @@ class ProfileScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 15,
                         fontFamily: 'NeonTubes2',
-                            color: const Color.fromARGB(255, 64, 64, 64),
-      
+                        color: const Color.fromARGB(255, 64, 64, 64),
                       ),
                     ),
                     SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () async {
                         await FirebaseAuth.instance.signOut();
-           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginPage()));
-
-                        },                      
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginPage()));
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 171, 4, 255),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 32, vertical: 16),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),

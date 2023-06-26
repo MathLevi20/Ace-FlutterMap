@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -28,8 +27,6 @@ class _GoogleMapState extends State<GoogleMaps> {
   late GoogleMapController mapController;
   late LatLng _center;
   late bool _isLoading = true;
-  late bool _isLoading2 = true;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Set<Marker> markers = {};
   Set<Polyline> polylines = {};
@@ -37,7 +34,6 @@ class _GoogleMapState extends State<GoogleMaps> {
   TextEditingController address1Controller = TextEditingController();
   TextEditingController address2Controller = TextEditingController();
 
-  Set<Polyline> _polyline = Set<Polyline>();
   List<LatLng> polylineCoordinates = [];
   late PolylinePoints polylinePoints;
 
@@ -122,9 +118,7 @@ class _GoogleMapState extends State<GoogleMaps> {
     markers.add(marcadorIfpi);
     markers.add(marcadorIfpiSul);
     print('Error retrieving markers: $markers');
-    setState(() {
-      _isLoading2 = false;
-    });
+
   }
 
   Future<void> _requestLocationPermission() async {

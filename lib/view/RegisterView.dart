@@ -19,7 +19,6 @@ class _RegisterUserState extends State<RegisterUser> {
   final TextEditingController _usernameController = TextEditingController();
   PickedFile? pickedImage;
   File? imageFile  ;
-  bool _load = false; // Initialize with null
   String _errorMessage = '';
 
   void _pickImage() async {

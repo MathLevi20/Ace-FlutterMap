@@ -1,10 +1,10 @@
-import 'dart:ffi';
 import 'package:geocoding/geocoding.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:maps/database/user.dart';
 import 'package:maps/view/UsersProfileView.dart';
+import '../infra/getUserUID.dart';
 
 class ListUser extends StatefulWidget {
   const ListUser({Key? key});
@@ -45,15 +45,6 @@ class _ListUserState extends State<ListUser> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
 
-  String? getUserUID() {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      final uid = user.uid;
-      return uid;
-    }
-    return null;
-  }
-
   String? userUID;
 
   @override
@@ -93,10 +84,10 @@ class _ListUserState extends State<ListUser> {
                   const SizedBox(height: 4.0),
                   ElevatedButton(
                     onPressed: _showCreateDialog,
-                    child: const Text('Criar Usuário',
+                    child: const Text(
+                      'Criar Usuário',
                       textAlign: TextAlign.center, // Centralizar o título
                     ),
-                    
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromARGB(255, 116, 0, 174),
                     ),
@@ -107,11 +98,7 @@ class _ListUserState extends State<ListUser> {
             ),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: _firestore
-                    .collection('users')
-                    .doc(getUserUID())
-                    .collection('contact')
-                    .snapshots(),
+                stream: usercontroller.listUser(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Center(
@@ -166,7 +153,7 @@ class _ListUserState extends State<ListUser> {
                                   icon: const Icon(Icons.delete),
                                   color: Color.fromARGB(255, 63, 0, 209),
                                   onPressed: () {
-                                    _deleteUser(users[index].id);
+                                    usercontroller.deleteUser(users[index].id);
                                   },
                                 ),
                                 IconButton(
@@ -356,7 +343,6 @@ class _ListUserState extends State<ListUser> {
             borderRadius: BorderRadius.circular(16.0),
           ),
           title: const Text('Criar Usuário'),
-          
           content: Container(
             width: MediaQuery.of(context).size.width * 0.8,
             padding: const EdgeInsets.all(1.0),
@@ -498,36 +484,8 @@ class _ListUserState extends State<ListUser> {
     final address = _address.text;
     final phone = _phone.text;
     final email = _email.text;
-    double? latitude;
-    double? longitude;
 
-    try {
-      List<Location> locations = await locationFromAddress(address);
-
-      if (locations.isNotEmpty) {
-        latitude = locations.first.latitude;
-        longitude = locations.first.longitude;
-        print(latitude);
-        print(longitude);
-      }
-    } catch (e) {
-      print('Erro ao obter as coordenadas: $e');
-    }
-
-    await _firestore
-        .collection('users')
-        .doc(getUserUID())
-        .collection('contact')
-        .doc(userId)
-        .update({
-      'name': name,
-      'description': description,
-      'address': address,
-      'lat': latitude,
-      'long': longitude,
-      'phone': phone,
-      'email': email,
-    });
+    usercontroller.updateUser(userId, name, description, address, phone, email);
 
     _name.clear();
     _description.clear();
@@ -542,49 +500,13 @@ class _ListUserState extends State<ListUser> {
     final address = _addressController.text;
     final phone = _phoneController.text;
     final email = _emailController.text;
-    double? latitude;
-    double? longitude;
 
-    try {
-      List<Location> locations = await locationFromAddress(address);
-
-      if (locations.isNotEmpty) {
-        latitude = locations.first.latitude;
-        longitude = locations.first.longitude;
-        print(latitude);
-        print(longitude);
-      }
-    } catch (e) {
-      print('Erro ao obter as coordenadas: $e');
-    }
-
-    await _firestore
-        .collection('users')
-        .doc(getUserUID())
-        .collection('contact')
-        .add({
-      'name': name,
-      'description': description,
-      'address': address,
-      'phone': phone,
-      'email': email,
-      'lat': latitude,
-      'long': longitude,
-    });
+    usercontroller.createUser(name, description, address, phone, email);
 
     _nameController.clear();
     _descriptionController.clear();
     _addressController.clear();
     _emailController.clear();
     _phoneController.clear();
-  }
-
-  void _deleteUser(String userId) async {
-    await _firestore
-        .collection('users')
-        .doc(getUserUID())
-        .collection('contact')
-        .doc(userId)
-        .delete();
   }
 }

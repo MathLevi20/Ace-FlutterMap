@@ -1,9 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-
-
-
-
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
@@ -38,10 +34,4 @@ class AuthService {
       return 'Erro: $e'; // Trata possíveis erros
     }
   }
-
-  // Logout de usuário
-  Future<void> signOut() async {
-    await _firebaseAuth.signOut();
-  }
-  
 }
