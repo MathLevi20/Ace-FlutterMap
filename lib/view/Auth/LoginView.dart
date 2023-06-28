@@ -1,21 +1,18 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:maps/database/auth.dart';
-import 'package:maps/view/MenuView.dart';
-import 'package:maps/view/PasswordResertView.dart';
-import 'package:maps/view/RegisterView.dart';
+import 'package:maps/controller/AuthController.dart';
+import 'package:maps/view/Auth/PasswordResertView.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _RegisterPageState createState() => _RegisterPageState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _RegisterPageState extends State<LoginPage> {
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
@@ -28,9 +25,9 @@ class _RegisterPageState extends State<LoginPage> {
         await authService.signInWithEmailAndPassword(email, password);
     print(loginResult);
     if (loginResult.startsWith('Erro')) {
-      final errorMessage =
-          loginResult
-          .toString().replaceAll('Erro: [firebase_auth/unknown] ', '');
+      final errorMessage = loginResult
+          .toString()
+          .replaceAll('Erro: [firebase_auth/unknown] ', '');
 
       showDialog(
         context: context,
@@ -48,10 +45,8 @@ class _RegisterPageState extends State<LoginPage> {
         ),
       );
     } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Menu()),
-      );
+
+      Navigator.pushNamed(context, '/menu');
     }
   }
 
@@ -119,6 +114,7 @@ class _RegisterPageState extends State<LoginPage> {
                     MaterialPageRoute(
                         builder: (context) => PasswordResetScreen()),
                   );
+                  Navigator.pushNamed(context, '/passwordresert');
                 },
                 style: TextButton.styleFrom(
                   foregroundColor: Color.fromARGB(255, 63, 0, 209),
@@ -127,10 +123,7 @@ class _RegisterPageState extends State<LoginPage> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RegisterUser()),
-                  );
+                  Navigator.pushNamed(context, '/register');
                 },
                 style: TextButton.styleFrom(
                   foregroundColor: Color.fromARGB(255, 63, 0, 209),

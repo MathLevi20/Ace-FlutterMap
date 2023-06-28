@@ -3,22 +3,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:image_picker/image_picker.dart';
-import 'package:maps/main.dart';
 
-class RegisterUser extends StatefulWidget {
-  const RegisterUser({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<RegisterUser> createState() => _RegisterUserState();
+  State<RegisterScreen> createState() => _RegisterState();
 }
 
-class _RegisterUserState extends State<RegisterUser> {
+class _RegisterState extends State<RegisterScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   PickedFile? pickedImage;
-  File? imageFile  ;
+  File? imageFile;
   String _errorMessage = '';
 
   void _pickImage() async {
@@ -57,10 +56,8 @@ class _RegisterUserState extends State<RegisterUser> {
           await user.updateDisplayName(_usernameController.text);
         }
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MainPage()),
-        );
+
+        Navigator.pushNamed(context, '/login');
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

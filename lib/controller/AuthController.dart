@@ -19,6 +19,11 @@ class AuthService {
     }
   }
 
+  void logoutUser() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    await auth.signOut();
+  }
+
   // Login de usuário
   Future<String> signInWithEmailAndPassword(
       String email, String password) async {
@@ -35,3 +40,4 @@ class AuthService {
     }
   }
 }
+AuthService authController = AuthService();

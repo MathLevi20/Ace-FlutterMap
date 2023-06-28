@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocoding/geocoding.dart';
-
-import '../infra/getUserUID.dart';
+import '../model/User.dart';
 
 class UserController {
+  UserModel currentUser = UserModel.getCurrentUser() as UserModel;
+
   void deleteUser(String userId) async {
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     await _firestore
         .collection('users')
-        .doc(getUserUID())
+        .doc(currentUser.uid)
         .collection('contact')
         .doc(userId)
         .delete();
@@ -34,7 +35,7 @@ class UserController {
 
     await _firestore
         .collection('users')
-        .doc(getUserUID())
+        .doc(currentUser.uid)
         .collection('contact')
         .doc(userId)
         .update({
@@ -56,7 +57,7 @@ class UserController {
 
     await _firestore
         .collection('users')
-        .doc(getUserUID())
+        .doc(currentUser.uid)
         .collection('contact')
         .add({
       'name': name,
@@ -74,9 +75,30 @@ class UserController {
 
     return _firestore
         .collection('users')
-        .doc(getUserUID())
+        .doc(currentUser.uid)
         .collection('contact')
         .snapshots();
+  }
+
+  Future<DocumentSnapshot> fetchUserContact(String profileId) async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser.uid)
+        .collection('contact')
+        .doc(profileId)
+        .get();
+
+    return snapshot;
+  }
+
+  Future<QuerySnapshot> fetchUser() async {
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser.uid)
+        .collection('contact')
+        .get();
+
+    return snapshot;
   }
 }
 

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'LoginView.dart';
+import '../../model/User.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
-
+    UserModel currentUser = UserModel.getCurrentUser() as UserModel;
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -47,12 +47,12 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 50,
-                      backgroundImage: NetworkImage(user?.photoURL ??
+                      backgroundImage: NetworkImage(currentUser.photoURL ??
                           'https://firebasestorage.googleapis.com/v0/b/pointer-flutter.appspot.com/o/user.png?alt=media&token=4d995d18-251d-4d18-9971-8b8346372aeb'),
                     ),
                     SizedBox(height: 16),
                     Text(
-                      'User: ${user?.displayName ?? ''}',
+                      'User: ${currentUser.displayName ?? ''}',
                       style: TextStyle(
                         fontSize: 16,
                         fontFamily: 'NeonTubes2',
@@ -61,7 +61,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Email: ${user?.email ?? ''}',
+                      'Email: ${currentUser.email ?? ''}',
                       style: TextStyle(
                         fontSize: 15,
                         fontFamily: 'NeonTubes2',
@@ -72,10 +72,9 @@ class ProfileScreen extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () async {
                         await FirebaseAuth.instance.signOut();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginPage()));
+  
+    Navigator.pushNamed(context, '/login');
+
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 171, 4, 255),

@@ -1,38 +1,19 @@
-import 'package:geocoding/geocoding.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:maps/database/user.dart';
-import 'package:maps/view/UsersProfileView.dart';
-import '../infra/getUserUID.dart';
+import 'package:maps/controller/ContactController.dart';
+import 'package:maps/view/Contacts/ContactsProfileView.dart';
 
-class ListUser extends StatefulWidget {
-  const ListUser({Key? key});
+import '../../model/User.dart';
+
+class ListContactsScreen extends StatefulWidget {
+  const ListContactsScreen({Key? key});
 
   @override
-  _ListUserState createState() => _ListUserState();
+  _ListContactsState createState() => _ListContactsState();
 }
 
-Future<List<double>> getCoordinatesFromAddress(String address) async {
-  try {
-    List<Location> locations = await locationFromAddress(address);
 
-    if (locations.isNotEmpty) {
-      double latitude = locations.first.latitude;
-      double longitude = locations.first.longitude;
-      print(latitude);
-      print(longitude);
-      return [latitude, longitude];
-    }
-  } catch (e) {
-    print('Erro ao obter as coordenadas: $e');
-  }
-
-  return [];
-}
-
-class _ListUserState extends State<ListUser> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+class _ListContactsState extends State<ListContactsScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
@@ -46,11 +27,12 @@ class _ListUserState extends State<ListUser> {
   final TextEditingController _phoneController = TextEditingController();
 
   String? userUID;
+  UserModel currentUser = UserModel.getCurrentUser() as UserModel;
 
   @override
   void initState() {
     super.initState();
-    userUID = getUserUID();
+    userUID = currentUser.uid;
   }
 
   @override

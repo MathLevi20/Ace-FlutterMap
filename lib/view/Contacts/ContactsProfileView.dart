@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../../controller/ContactController.dart';
+import '../../controller/MapController.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String profileId;
@@ -21,73 +23,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String phone = "";
   String email = "";
 
-  late GoogleMapController mapController;
+  late GoogleMapController googleMapController;
   late LatLng _center;
   late bool _isLoading = true;
 
   Set<Marker> markers = {};
   Set<Polyline> polylines = {};
+  List<LatLng> polylineCoordinates = [];
 
   TextEditingController address1Controller = TextEditingController();
   TextEditingController address2Controller = TextEditingController();
 
-  List<LatLng> polylineCoordinates = [];
-
   void _onMapCreated(GoogleMapController controller) {
     setState(() {
-      mapController = controller;
+      googleMapController = controller;
+    });
+  }
+
+  Future<void> loadMarkers() async {
+    Set<Marker> loadedMarkers =
+        await mapController.carregarMarcadores(usercontroller.fetchUser());
+    setState(() {
+      markers = loadedMarkers;
+    });
+  }
+
+  Future<void> getCurrentLocation() async {
+    LatLng currentLocation = await mapController.getCurrentLocation();
+    setState(() {
+      _center = currentLocation;
     });
   }
 
   void fetchUserProfile() async {
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.profileUid)
-        .collection('contact')
-        .doc(widget.profileId)
-        .get();
-    if (snapshot.exists) {
-      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
-      final icon_3 = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(size: Size(60, 60)), // Icon size
-        "assets/images/arrow-new.png", // Image file path
-      );
+    var data = await usercontroller.fetchUserContact(widget.profileId);
 
-      if (data != null) {
-        LatLng latLng = LatLng(data['lat'].toDouble(), data['long'].toDouble());
-
-        print('Localização: $latLng');
-
-        setState(() {
-          _center = latLng;
-
-          latitude = data['lat'];
-          longitude = data['long'];
-          name = data['name'] ?? "";
-          description = data['description'] ?? "";
-          address = data['address'] ?? "";
-          phone = data['phone'] ?? "";
-          email = data['email'] ?? "";
-          _isLoading = false;
-        });
-        Marker user = Marker(
-          markerId: MarkerId(data['name']),
-          position: LatLng(data['lat'].toDouble(), data['long'].toDouble()),
-          draggable: true,
-          icon: icon_3,
-          infoWindow: InfoWindow(
-            title: data['name'],
-            snippet: data['description'],
-          ),
-        );
-        markers.add(user);
-      }
-    }
+    setState(() {
+      latitude = data['lat'];
+      longitude = data['long'];
+      name = data['name'] ?? "";
+      description = data['description'] ?? "";
+      address = data['address'] ?? "";
+      phone = data['phone'] ?? "";
+      email = data['email'] ?? "";
+      _isLoading = false;
+    });
   }
 
   @override
   void initState() {
     super.initState();
+    getCurrentLocation();
     fetchUserProfile();
   }
 
