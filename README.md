@@ -16,14 +16,14 @@ O projeto foi desenvolvido seguindo a arquitetura Model-View-Controller (MVC) pa
 
 ## Fluxo de Funcionalidades
 
--Tela de Login: Permite que os usuários façam login usando suas credenciais (e-mail/senha).
--Tela de Registro: Permite que novos usuários criem uma conta fornecendo suas informações (nome, e-mail, senha,imagem de perfil).
--Tela de Redefinição de Senha: Permite que os usuários redefinam sua senha fornecendo seu endereço de e-mail.
--Tela do Mapa: Exibe um mapa usando a API do Google Maps, com marcadores e informações relevantes com base em dados armazenados via firebase.
--Tela de Lista de Contatos: Mostra uma lista de contatos armazenados no aplicativo.
--Tela de Perfil do Usuario: Mostra os dados do usuria em conjunto com a sua localização.
--Tela de Perfil do Usuário: Exibe as informações do perfil do usuário, como nome, e-mail e foto do perfil.
--Funcionalidade de Logout: Permite que os usuários façam logout do aplicativo e retornem à tela de login.
+- Tela de Login: Permite que os usuários façam login usando suas credenciais (e-mail/senha).
+- Tela de Registro: Permite que novos usuários criem uma conta fornecendo suas informações (nome, e-mail, senha,imagem de perfil).
+- Tela de Redefinição de Senha: Permite que os usuários redefinam sua senha fornecendo seu endereço de e-mail.
+- Tela do Mapa: Exibe um mapa usando a API do Google Maps, com marcadores e informações relevantes com base em dados armazenados via firebase.
+- Tela de Lista de Contatos: Mostra uma lista de contatos armazenados no aplicativo.
+- Tela de Perfil do Usuario: Mostra os dados do usuria em conjunto com a sua localização.
+- Tela de Perfil do Usuário: Exibe as informações do perfil do usuário, como nome, e-mail e foto do perfil.
+- Funcionalidade de Logout: Permite que os usuários façam logout do aplicativo e retornem à tela de login.
 
 ## Configuração e Dependências
 
