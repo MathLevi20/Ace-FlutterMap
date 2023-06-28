@@ -28,8 +28,13 @@ O projeto foi desenvolvido seguindo a arquitetura Model-View-Controller (MVC) pa
 ## Configuração e Dependências
 
 - Configure as chaves de Google Maps para autenticação de usuários e acesso ao serviço de mapas.
-- Utilize o pacote `google_maps_flutter` para integrar o Google Maps no aplicativo Flutter.
-- 
+- Configure as chaves do firebase para autenticação de usuários e acesso ao banco de dados.
+- Integre o pacote `google_maps_flutter` para integrar o Google Maps no aplicativo Flutter.
+- Utilize as dependências firebase_core, firebase_auth e cloud_firestore para interagir com o  Firebase e armazenar dados.
+- Use o pacote flutter_polyline_points para calcular e exibir polilinhas no mapa.
+- Faça uso do pacote geolocator para obter a localização atual do dispositivo.
+- Utilize o pacote geocoding para recursos de geocodificação, como obter coordenadas a partir de um endereço.
+- Gerencie permissões de localização utilizando o pacote permission_handler para solicitar permissões aos usuários.
 
 ## Instruções de Instalação e Execução
 
@@ -37,6 +42,7 @@ O projeto foi desenvolvido seguindo a arquitetura Model-View-Controller (MVC) pa
 2. Certifique-se de ter o Flutter SDK instalado.
 3. Execute `flutter pub get` para obter todas as dependências do projeto.
 4. Execute `flutter run` para iniciar o aplicativo no emulador ou dispositivo conectado.
+5. Tenha as chaves de acesso do Google Map Api e do Firebase no projeto
 
 ## Contribuição
 
