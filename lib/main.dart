@@ -15,7 +15,6 @@ void main() async {
     debugShowCheckedModeBanner: false,
     home: LoginScreen(),
     routes: {
-      '/': (context) => LoginScreen(),
       '/login': (context) => LoginScreen(),
       '/menu': (context) => MenuScreen(),
       '/register': (context) => RegisterScreen(),

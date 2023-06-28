@@ -27,7 +27,7 @@ class _ListContactsState extends State<ListContactsScreen> {
   final TextEditingController _phoneController = TextEditingController();
 
   String? userUID;
-  UserModel currentUser = UserModel.getCurrentUser() as UserModel;
+  UserModel currentUser = userModel.getCurrentUser() as UserModel;
 
   @override
   void initState() {

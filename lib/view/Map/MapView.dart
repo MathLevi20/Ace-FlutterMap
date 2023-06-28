@@ -21,7 +21,6 @@ class _MapScreenState extends State<MapScreen> {
 
   Set<Polyline> polylines = {};
   Set<Marker> markers = {};
-  List<LatLng> polylineCoordinates = [];
 
   TextEditingController address1Controller = TextEditingController();
   TextEditingController address2Controller = TextEditingController();
@@ -33,9 +32,11 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Future<void> loadMarkers() async {
-    Set<Marker> loadedMarkers = await mapController.carregarMarcadores(usercontroller.fetchUser());
+    Set<Marker> loadedMarkers =
+        await mapController.carregarMarcadores(usercontroller.fetchUser());
     setState(() {
       markers = loadedMarkers;
+      _isLoading = false;
     });
   }
 
@@ -60,9 +61,11 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
-    loadMarkers();
-    getCurrentLocation();
     requestLocationPermission();
+
+    getCurrentLocation();
+
+    loadMarkers();
   }
 
   void updatePolyline() async {

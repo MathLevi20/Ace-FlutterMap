@@ -8,12 +8,12 @@ class UserModel {
 
   UserModel({this.uid, this.displayName, this.email, this.photoURL});
 
-  static Future<UserModel?> getCurrentUser() async {
+  UserModel? getCurrentUser() {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user == null) return null;
 
-    await user.reload();
+     user.reload();
     user = FirebaseAuth.instance.currentUser;
 
     return UserModel(
@@ -24,3 +24,4 @@ class UserModel {
     );
   }
 }
+UserModel userModel = UserModel();

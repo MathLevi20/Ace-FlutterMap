@@ -3,7 +3,7 @@ import 'package:geocoding/geocoding.dart';
 import '../model/User.dart';
 
 class UserController {
-  UserModel currentUser = UserModel.getCurrentUser() as UserModel;
+  UserModel currentUser = userModel.getCurrentUser() as UserModel;
 
   void deleteUser(String userId) async {
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;

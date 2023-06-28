@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
+import 'ContactController.dart';
 
 class MapController {
   late LatLng center;
@@ -66,7 +67,7 @@ class MapController {
     );
     markers.add(marcadorIfpi);
     markers.add(marcadorIfpiSul);
-    print('Error retrieving markers: $markers');
+    print(' $markers');
     return markers;
   }
 
@@ -75,7 +76,8 @@ class MapController {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
-      print('Localização: $center');
+      print('Localização: $LatLng(position.latitude, position.longitude)');
+
       return center = LatLng(position.latitude, position.longitude);
     } catch (e) {
       return null;

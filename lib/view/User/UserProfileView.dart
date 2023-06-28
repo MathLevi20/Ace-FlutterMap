@@ -6,7 +6,7 @@ import '../../model/User.dart';
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    UserModel currentUser = UserModel.getCurrentUser() as UserModel;
+    UserModel currentUser = userModel.getCurrentUser() as UserModel;
     
     return Scaffold(
       appBar: AppBar(
