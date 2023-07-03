@@ -67,6 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       phone = data['phone'] ?? "";
       email = data['email'] ?? "";
       _isLoading = false;
+      _center = LatLng(data['lat'], data['long']);
     });
   }
 
@@ -75,11 +76,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     getCurrentLocation();
     fetchUserProfile();
+    loadMarkers();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
+    if (_isLoading == true) {
       return Scaffold(
         body: const Center(
           child: CircularProgressIndicator(),
@@ -108,18 +110,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               Container(
                 height: 220,
-                margin: EdgeInsets.all(10.0),
-                alignment: Alignment.topCenter,
+                margin: EdgeInsets.all(2.0),
+                alignment: Alignment.topLeft,
+                color: Color.fromARGB(255, 63, 0, 209),
                 child: Card(
                   color: Color.fromARGB(255, 63, 0, 209),
                   margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  elevation: 4,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   child: SingleChildScrollView(
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(10, 0, 210, 0),
+                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,

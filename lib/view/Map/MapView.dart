@@ -17,6 +17,7 @@ class _MapScreenState extends State<MapScreen> {
   late LatLng _center;
   late bool _isColumnVisible = false;
   late bool _isLoading = true;
+  late bool _isLoadingCurrentLocation = true;
   late PolylinePoints polylinePoints;
 
   Set<Polyline> polylines = {};
@@ -42,8 +43,10 @@ class _MapScreenState extends State<MapScreen> {
 
   Future<void> getCurrentLocation() async {
     LatLng currentLocation = await mapController.getCurrentLocation();
+    print(currentLocation);
     setState(() {
       _center = currentLocation;
+      _isLoadingCurrentLocation = false;
     });
   }
 
@@ -82,7 +85,7 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
+    if (_isLoading == true && _isLoadingCurrentLocation == true) {
       return Scaffold(
         body: const Center(
           child: CircularProgressIndicator(),
@@ -90,6 +93,11 @@ class _MapScreenState extends State<MapScreen> {
       );
     } else {
       return Scaffold(
+        appBar: AppBar(
+          title: const Text('Mapa'),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 63, 0, 209),
+        ),
         body: Column(
           children: [
             Visibility(

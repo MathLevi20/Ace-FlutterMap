@@ -45,7 +45,7 @@ class _ListContactsState extends State<ListContactsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Contato'),
+        title: const Text('Contatos'),
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 63, 0, 209),
       ),
